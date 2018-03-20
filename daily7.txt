@@ -1,0 +1,870 @@
+
+#pragma warning(disable : 4996)
+public class Stack {
+private int top ;
+private int MAX_SIZE ;
+private int a[];
+public Stack (int s)
+{
+MAX_SIZE = s ;
+a = new int[s];
+top = -1 ;
+}
+
+public void push(int pushedElement) {
+
+if (top < MAX_SIZE- 1) {
+
+   top++;
+
+   a[top] = pushedElement;
+
+   System.out.println("Element " + pushedElement
+
+     + " is pushed to Stack !");
+
+   printElements();
+
+} else {
+
+   System.out.println("Stack Overflow !");
+
+}
+
+}
+
+public void pop() {
+
+if (top >= 0) {
+
+   top--;
+
+   System.out.println("Pop operation done !");
+
+} else {
+
+   System.out.println("Stack Underflow !");
+
+}
+
+}
+
+public void printElements() {
+
+if (top >= 0) {
+
+   System.out.println("Elements in stack :");
+
+   for (int i = 0; i <= top; i++) {
+
+    System.out.println(a[i]);
+
+   }
+
+}
+
+}
+
+public static void main(String[] args)
+
+{
+
+Stack stack = new Stack();
+
+stack.pop();
+
+stack.push(();
+
+stack.push(();
+
+stack.push([);
+
+stack.push({);
+
+stack.pop();
+
+stack.pop();
+
+stack.pop();
+
+stack.pop();
+
+}
+
+}
+
+OUTPUT:
+
+Stack Underflow !
+
+Element ( is pushed to stack !
+
+Elements in stack:
+
+(
+
+Element ( is pushed to stack !
+
+Elements in stack:
+
+(
+
+(
+
+Element [ is pushed to stack !
+
+Elements in stack:
+
+(
+
+(
+
+[
+
+Element { is pushed to stack !
+
+Elements in stack:
+
+(
+
+(
+
+[
+
+{
+
+Stack Overflow !
+
+Pop operation done !
+
+Pop operation done !
+
+Pop operation done !
+
+Pop operation done !
+
+Stack Underflow !
+
+Executable C Code:
+
+Case1:
+
+// Include the header files
+
+#include<stdio.h>
+
+#include<stdlib.h>
+
+#include<string.h>
+
+// Structure of a node in stack
+
+struct nodeOfStack
+
+{
+
+     char value;
+
+     struct nodeOfStack *link;
+
+};
+
+// Push function of stack
+
+void stackPush(struct nodeOfStack** head, int val)
+
+{
+
+     // Create new node
+
+     struct nodeOfStack* newStackNode =(struct nodeOfStack*)
+
+malloc(sizeof(struct nodeOfStack));
+
+     if (newStackNode == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Add new node to head
+
+     newStackNode->value = val;
+
+     newStackNode->link = (*head);
+
+     (*head) = newStackNode;
+
+}
+
+// Pop function of stack
+
+int stackPop(struct nodeOfStack** head)
+
+{
+
+     char val;
+
+     struct nodeOfStack *stackTop;
+
+     if (*head == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Return the head value
+
+     else
+
+     {
+
+          stackTop = *head;
+
+          val = stackTop->value;
+
+          *head = stackTop->link;
+
+          free(stackTop);
+
+          return val;
+
+     }
+
+}
+
+// Functio to check the parenthesis are matching
+
+int checkPairMatching(char val1, char val2)//Check for matching pairs
+
+{
+
+     if (val1 == '(' && val2 == ')')
+
+     return 1;
+
+     else if (val1 == '{' && val2 == '}')
+
+     return 1;
+
+     else if (val1 == '[' && val2 == ']')
+
+     return 1;
+
+     else
+
+     return 0;
+
+}
+
+// Function to check th given expression is balanced
+
+int checkBalancedParenthesis(char expr[])
+
+{
+
+     int di = 0;
+
+     struct nodeOfStack *stack = NULL;
+
+     while (expr[di])
+
+     {
+
+          // If open parenthesis push to stack
+
+          if (expr[di] == '{' || expr[di] == '(' || expr[di] ==
+
+'[')
+
+          stackPush(&stack, expr[di]);
+
+          // If close parenthesis pop from stack
+
+          if (expr[di] == '}' || expr[di] == ')' || expr[di] ==
+
+']')
+
+          {
+
+              if (stack == NULL)
+
+              return 0;
+
+              else if ( !checkPairMatching(stackPop(&stack),
+
+expr[di]) )
+
+              return 0;
+
+          }
+
+          di++;
+
+     }
+
+     // If stack is null the expression is balanced
+
+     if (stack == NULL)
+
+          return 1;
+
+     // Otherwise expression is not balanced
+
+     else
+
+          return 0;
+
+}
+
+int main()
+
+{
+
+     char expr[100];
+
+     char expressions[100][100];
+
+     int di,num;
+
+     scanf("%d",&num);
+
+     fflush(stdin);
+
+     // Read string to multidimensional array
+
+     for(di=0;di<num;di++)
+
+     {
+
+          fgets(expr, sizeof expr, stdin);
+
+          strcpy(expressions[di],expr);
+
+     }
+
+     // Check each string is balanced or nor
+
+     for(di=0;di<num;di++)
+
+     {
+
+          if(expressions[di][0]=='\n') {
+
+              printf("Yes\n");
+
+              exit(0);
+
+          }
+
+          // Print result
+
+          if (checkBalancedParenthesis(expressions[di]))
+
+              printf("\n Yes ");
+
+          else
+
+              printf("\n No ");
+
+     }
+
+     printf("\n");
+
+     system("pause");
+
+     return 0;
+
+}
+
+Case 2:
+
+// Include the header files
+
+#include<stdio.h>
+
+#include<stdlib.h>
+
+#include<string.h>
+
+// Structure of a node in stack
+
+struct nodeOfStack
+
+{
+
+     char value;
+
+     struct nodeOfStack *link;
+
+};
+
+// Push function of stack
+
+void stackPush(struct nodeOfStack** head, int val)
+
+{
+
+     // Create new node
+
+     struct nodeOfStack* newStackNode =(struct nodeOfStack*)
+
+malloc(sizeof(struct nodeOfStack));
+
+     if (newStackNode == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Add new node to head
+
+     newStackNode->value = val;
+
+     newStackNode->link = (*head);
+
+     (*head) = newStackNode;
+
+}
+
+// Pop function of stack
+
+int stackPop(struct nodeOfStack** head)
+
+{
+
+     char val;
+
+     struct nodeOfStack *stackTop;
+
+     if (*head == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Return the head value
+
+     else
+
+     {
+
+          stackTop = *head;
+
+          val = stackTop->value;
+
+          *head = stackTop->link;
+
+          free(stackTop);
+
+          return val;
+
+     }
+
+}
+
+// Functio to check the parenthesis are matching
+
+int checkPairMatching(char val1, char val2)//Check for matching pairs
+
+{
+
+     if (val1 == '(' && val2 == ')')
+
+     return 1;
+
+     else if (val1 == '{' && val2 == '}')
+
+     return 1;
+
+     else if (val1 == '[' && val2 == ']')
+
+     return 1;
+
+     else
+
+     return 0;
+
+}
+
+// Function to check th given expression is balanced
+
+int checkBalancedParenthesis(char expr[])
+
+{
+
+     int di = 0;
+
+     struct nodeOfStack *stack = NULL;
+
+     while (expr[di])
+
+     {
+
+          // If open parenthesis push to stack
+
+          if (expr[di] == '{' || expr[di] == '(' || expr[di] ==
+
+'[')
+
+          stackPush(&stack, expr[di]);
+
+          // If close parenthesis pop from stack
+
+          if (expr[di] == '}' || expr[di] == ')' || expr[di] ==
+
+']')
+
+          {
+
+              if (stack == NULL)
+
+              return 0;
+
+              else if ( !checkPairMatching(stackPop(&stack),
+
+expr[di]) )
+
+              return 0;
+
+          }
+
+          di++;
+
+     }
+
+     // If stack is null the expression is balanced
+
+     if (stack == NULL)
+
+          return 1;
+
+     // Otherwise ex is not balanced
+
+     else
+
+          return 0;
+
+}
+
+int main()
+
+{
+
+     char expr[100];
+
+     int di,num;
+
+     scanf("%d",&num);
+
+     fflush(stdin);
+
+     // Check each string is balanced or nor
+
+     for(di=0;di<num;di++)
+
+     {
+
+          fgets(expr, sizeof expr, stdin);
+
+          if(expr[di]=='\n') {
+
+              printf("Yes\n");
+
+              exit(0);
+
+          }
+
+          // Print result
+
+          if (checkBalancedParenthesis(expr))
+
+              printf("Yes\n");
+
+          else
+
+              printf("No\n");
+
+     }
+
+     system("pause");
+
+     return 0;
+
+}
+
+Case 3:
+
+// Include the header files
+
+#include<stdio.h>
+
+#include<stdlib.h>
+
+#include<string.h>
+
+// Structure of a node in stack
+
+struct nodeOfStack
+
+{
+
+     char value;
+
+     struct nodeOfStack *link;
+
+};
+
+// Push function of stack
+
+void stackPush(struct nodeOfStack** head, int val)
+
+{
+
+     // Create new node
+
+     struct nodeOfStack* newStackNode =(struct nodeOfStack*)
+
+malloc(sizeof(struct nodeOfStack));
+
+     if (newStackNode == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Add new node to head
+
+     newStackNode->value = val;
+
+     newStackNode->link = (*head);
+
+     (*head) = newStackNode;
+
+}
+
+// Pop function of stack
+
+int stackPop(struct nodeOfStack** head)
+
+{
+
+     char val;
+
+     struct nodeOfStack *stackTop;
+
+     if (*head == NULL)
+
+     {
+
+          getchar();
+
+          exit(0);
+
+     }
+
+     // Return the head value
+
+     else
+
+     {
+
+          stackTop = *head;
+
+          val = stackTop->value;
+
+          *head = stackTop->link;
+
+          free(stackTop);
+
+          return val;
+
+     }
+
+}
+
+// Functio to check the parenthesis are matching
+
+int checkPairMatching(char val1, char val2)//Check for matching pairs
+
+{
+
+     if (val1 == '(' && val2 == ')')
+
+     return 1;
+
+     else if (val1 == '{' && val2 == '}')
+
+     return 1;
+
+     else if (val1 == '[' && val2 == ']')
+
+     return 1;
+
+     else
+
+     return 0;
+
+}
+
+// Function to check th given expression is balanced
+
+int checkBalancedParenthesis(char expr[])
+
+{
+
+     int di = 0;
+
+     struct nodeOfStack *stack = NULL;
+
+     while (expr[di])
+
+     {
+
+          // If open parenthesis push to stack
+
+          if (expr[di] == '{' || expr[di] == '(' || expr[di] ==
+
+'[')
+
+          stackPush(&stack, expr[di]);
+
+          // If close parenthesis pop from stack
+
+          if (expr[di] == '}' || expr[di] == ')' || expr[di] ==
+
+']')
+
+          {
+
+              if (stack == NULL)
+
+              return 0;
+
+              else if ( !checkPairMatching(stackPop(&stack),
+
+expr[di]) )
+
+              return 0;
+
+          }
+
+          di++;
+
+     }
+
+     // If stack is null the expression is balanced
+
+     if (stack == NULL)
+
+          return 1;
+
+     // Otherwise ex is not balanced
+
+     else
+
+          return 0;
+
+}
+
+int main()
+
+{
+
+     char expr[100];
+
+     int di;
+
+     FILE *fp1;
+
+     // Open the file
+
+     fp1=fopen("input.txt","r");
+
+     // Read each test and check each string is balanced or not
+
+     while(!feof(fp1))
+
+     {
+
+          fscanf(fp1,"%s",&expr);
+
+          if(expr[0]=='\n') {
+
+              printf("Yes\n");
+
+              exit(0);
+
+          }
+
+          // Print result
+
+          if (checkBalancedParenthesis(expr))
+
+              printf("Yes\n");
+
+          else
+
+              printf("No\n");
+
+     }
+
+     system("pause");
+
+     return 0;
+
+}
+
+Input File:
+
+input.txt
+
+([])
+(([{}])))
+([()[]()])()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

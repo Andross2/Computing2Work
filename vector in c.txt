@@ -1,0 +1,159 @@
+#include "vector.h"
+#include <stdlib.h>
+
+struct vector 
+{
+	int size;
+	int capacity;
+	int* data;
+};
+
+typedef struct vector Vector;
+
+VECTOR vector_init_default(void)
+{
+	Vector* pVector;
+	pVector = (Vector*)malloc(sizeof(Vector));
+	if (pVector != NULL)
+	{
+		pVector->size = 0;
+		pVector->capacity = 1;
+		pVector->data = (int*)(malloc(sizeof(int)*pVector->capacity));
+		if (pVector->data == NULL)
+		{
+			free(pVector);
+			pVector = NULL;
+		}
+	}
+	return pVector;
+}
+
+int vector_get_size(VECTOR hVector)
+{
+	Vector* pVector = (Vector*)hVector;
+	return pVector->size;
+
+}
+int vector_get_capacity(VECTOR hVector)
+{
+	Vector* pVector = (Vector*)hVector;
+	return pVector->capacity;
+
+}
+
+Status vector_push_back(VECTOR hVector, int item)
+{
+	Vector* pVector = (Vector*)hVector;
+	//if there enouth space
+	//if not- create space (resize)
+	int* temp;
+	int i;
+	if (pVector->size >= pVector->capacity)
+	{
+		temp = (int*)malloc(sizeof(int) * 2 * pVector->capacity);
+		if (temp == NULL)
+		{
+			return FAILURE;
+		}
+		for (i = 0; i < pVector->size; i++)
+		{
+			temp[i] = pVector->data[i];
+		}
+		free(pVector->data);
+		pVector->data = temp;
+		pVector->capacity *= 2;
+	}
+	//we have space 
+	pVector->data[pVector->size] = item;
+	pVector->size++;
+	return SUCCESS;
+}
+Status vector_pop_back(VECTOR hVector)
+{
+	Vector* pVector = (Vector*)hVector;
+	if (pVector->size <= 0)
+	{
+		return FAILURE;
+	}
+	pVector->size--;
+	return SUCCESS;
+}
+
+int* vector_at(VECTOR hVector, int index)
+{
+	Vector* pVector = (Vector*)hVector;
+	if (index < 0 || index >= pVector->size)
+	{
+		return NULL;
+	}
+	return &pVector->data[index];
+}
+void vector_destroy(VECTOR* phVector)
+{
+	Vector* pVector=(Vector*)*phVector;
+	free(pVector->data);
+	free(pVector);
+	*phVector = NULL;
+}
+//////////////////////////////////////////////////////////////////////////////
+#include "status.h"
+typedef void* VECTOR;
+
+VECTOR vector_init_default(void);
+//check the size
+int vector_get_size(VECTOR hVector);
+
+//check capacity
+int vector_get_capacity(VECTOR hVector);
+
+//print data
+//add item
+Status vector_push_back(VECTOR hVector, int item);
+
+//delete item
+//output the value of particular item
+Status vector_pop_back(VECTOR hVector);
+int* vector_at(VECTOR hVector, int index);
+void vector_destroy(VECTOR* phVector);
+//////////////////////////////////////////////////////////////////////////////
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "vector.h"
+
+
+int main(int argc, char* agrv[])
+{
+	//step1: Declare the handle 
+	VECTOR hVector = NULL;
+	int i;
+	int* p;
+	//step 2: Init object
+	hVector = vector_init_default();
+	//step 3: use the object
+	printf("size=%d\n",vector_get_size(hVector));
+	printf("capacity=%d\n", vector_get_capacity(hVector));
+	for (i = 0; i < 10; i++) {
+		if (vector_push_back(hVector, rand()) == FAILURE)
+		{
+			printf("Cannot add item\n");
+			exit(1);
+		}
+		printf("size=%d capacity=%d\n", vector_get_size(hVector), vector_get_capacity(hVector));
+	}
+	vector_pop_back(hVector);
+	printf("%d %d\n", vector_at(hVector, 2), *vector_at(hVector, 2));
+	p = vector_at(hVector, 2);
+	*p = 34; p = NULL;
+	printf("%d %d\n", vector_at(hVector, 2), *vector_at(hVector, 2));
+	//step 4: destroy object
+	vector_destroy(&hVector);
+	if (hVector == NULL)
+	{
+		printf("Done\n");
+	}
+	return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+enum status { FAILURE, SUCCESS };
+typedef enum status Status;

@@ -1,0 +1,83 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+
+std::map<char, char> mymap;
+mymap['('] = ')';
+mymap['{'] = '}';
+mymap['['] = ']';
+   string line;
+   ifstream myfile ("input.txt");
+   if (myfile.is_open())
+   {
+   getline(myfile,line);
+   int n = atoi(line.c_str());  
+       while ( getline (myfile,line) )
+       {
+           stack<char> mystack;
+           bool flag = true;
+           bool flag2 = true;
+           for(int i = 0; i<line.length();i++)
+           {
+               char s = line[i];
+               if(s == '{' or s == '(' or s == '[' )
+               {
+                   mystack.push(s);
+               }
+               else if(s == '}' or s == ')' or s == ']' )
+               {
+                   if(mystack.empty())
+                   {
+                       cout << "NO" << endl;
+                       flag = false;
+                       flag2 = false;
+                       break;                      
+                   }
+                   char tp = mystack.top();
+                   if(mymap[tp] != s)
+                   {
+                       cout << "NO" << endl;
+                       flag = false;
+                       flag2 = false;
+                       break;
+                   }
+                   else
+                   {
+                       mystack.pop();
+                   }
+               }
+           }
+           // while(!mystack.empty())
+           // {
+// char c = mystack.top();
+// cout << c ;
+// mystack.pop();
+           // }
+           if((mystack.size() == 0) and (flag or flag2) )
+           {
+               cout << "YES" << endl;
+           }
+       }
+
+       myfile.close();
+   }
+   else
+   {
+   cout << "Unable to open file" << endl;
+   exit(1);
+   }          
+   return 0;
+}
+
+input.txt:
+
+3
+([])
+(([{}])))
+([()[]()])[]
+
+YES
+NO
+YES

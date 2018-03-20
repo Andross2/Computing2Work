@@ -1,0 +1,162 @@
+%SystemRoot%\system32
+		//if ((phBit_flags->bit[flag_position] >> bit_set) & 1)
+		//{
+		//	bit = phBit_flags->bit[flag_position];
+		//}
+
+
+Given below are the required files. You can compile using
+
+gcc my_string.c test.c
+
+run using ./a.out
+
+Please copy over the comments from your pdf for each of the functions in the .h file. The capacity and size also include the \0.
+
+Hope the answer helps. If it did, please don't forget to rate the answer . Thank you.
+
+my_string.h
+
+==========
+
+
+#ifndef my_string_h
+#define my_string_h
+#include <string.h>
+
+typedef void* MY_STRING;
+
+struct my_string
+{
+char *value;
+int size;
+int capacity;
+};
+
+
+MY_STRING my_string_init_default(void);
+
+void my_string_destroy(MY_STRING* phMy_string);
+
+MY_STRING my_string_init_c_string(const char* c_string);
+
+int my_string_get_capacity(MY_STRING hMy_string);
+
+
+int my_string_get_size(MY_STRING hMy_string);
+
+int my_string_compare(MY_STRING hLeft_string, MY_STRING hRight_string);
+
+#endif /* my_string_h */
+
+my_string.c
+
+==========
+
+#include "my_string.h"
+#include <stdlib.h>
+
+MY_STRING my_string_init_default(void)
+{
+struct my_string* ptr = (struct my_string*) malloc(sizeof(struct my_string));
+if(ptr == NULL)
+return NULL;
+  
+ptr->capacity = 7;
+ptr->size = 0;
+ptr->value = malloc(sizeof(char) * ptr->capacity); //default capacity of 7
+if(ptr->value == NULL) //allocation failure
+ptr->capacity = 0;
+  
+ptr->value[0] = '\0'; //empty string
+return ptr;
+}
+
+void my_string_destroy(MY_STRING* phMy_string)
+{
+if(*phMy_string != NULL)
+{
+free(((struct my_string*)(*phMy_string))->value); //free the char array
+free(*phMy_string); //free the struct
+*phMy_string = NULL;
+}
+}
+
+MY_STRING my_string_init_c_string(const char* c_string)
+{
+struct my_string* ptr = (struct my_string*) malloc(sizeof(struct my_string));
+if(ptr == NULL)
+return NULL;
+  
+ptr->capacity = strlen(c_string) + 1;
+ptr->size = ptr->capacity;
+ptr->value = malloc(sizeof(char) * ptr->capacity);
+if(ptr->value == NULL) //allocation failure
+ptr->capacity = ptr->size = 0;
+  
+strcpy(ptr->value, c_string);
+return ptr;
+
+}
+
+int my_string_get_capacity(MY_STRING hMy_string)
+{
+return ((struct my_string*) hMy_string)->capacity;
+}
+
+
+int my_string_get_size(MY_STRING hMy_string)
+{
+return ((struct my_string*) hMy_string)->size;
+}
+
+int my_string_compare(MY_STRING hLeft_string, MY_STRING hRight_string)
+{
+char *s1 = ((struct my_string*) hLeft_string)->value;
+char *s2 = ((struct my_string*) hRight_string)->value;
+return strcmp(s1, s2);
+}
+
+test.c
+
+=====
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "my_string.h"
+
+int main(int argc, char* argv[])
+{
+MY_STRING str1 = NULL;
+MY_STRING str2 = NULL;
+  
+int cmp;
+  
+str1 = my_string_init_c_string("hello");
+str2 = my_string_init_c_string("hi");
+  
+printf("str1 capacity = %d \n", my_string_get_capacity(str1));
+printf("str1 size = %d \n", my_string_get_size(str1));
+  
+cmp = my_string_compare(str1, str2);
+if(cmp < 0)
+printf("str1 is less than str2 \n");
+else if(cmp > 0)
+printf("str1 is greater str2 \n");
+else
+printf("str1 is equal to str2 \n");
+  
+my_string_destroy(&str1);
+my_string_destroy(&str2);
+  
+return 0;
+}
+
+output
+
+str1 capacity = 6
+
+str1 size = 6
+
+str1 is less than str2
